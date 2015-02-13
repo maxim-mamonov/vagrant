@@ -117,7 +117,7 @@ class phpdevweb
       mode    => 644,
       replace => true,
       ensure  => present,
-      source  => "/vagrant/files/nginx/conf.d/symfony.conf",
+      source  => "/vagrant/files/nginx/conf.d/default.conf",
       require => Package["nginx"],
       notify  => Service["nginx"]
       ;

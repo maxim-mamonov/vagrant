@@ -8,7 +8,10 @@ Vagrant.configure("2") do |config|
   #config.vm.network :forwarded_port, guest: 80, host: 8080
 
   config.vm.network :private_network, ip: "192.168.56.60"
-  config.vm.hostname = "phpdev.local"
+  #config.vm.hostname = "phpdev.local"
+
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
 
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
