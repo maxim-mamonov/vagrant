@@ -1,6 +1,6 @@
 # Puppet manifest for my PHP dev machine
 Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
-class phpdevweb
+class devweb
 {
   File {
     owner   => "root",
@@ -35,12 +35,14 @@ class phpdevweb
   package {[
       "iptables",
       "vim-enhanced",
+      "subversion",
       "git",
       "nginx",
       "php",
       "php-fpm",
-      "mysql",
+      "memcached",
       "mysql-server",
+      "ntp",
       "samba",
       "samba-client",
       "samba-common",
@@ -55,6 +57,9 @@ class phpdevweb
       "php-mbstring",
       "php-xml",
       "php-mcrypt",
+      "php-pecl-memcache",
+      "php-pecl-memcached",
+      "php-soap",
     ]:
     ensure => present,
     require => [Yumrepo["remi"], Package["php"], Package["php-fpm"]],
@@ -67,6 +72,12 @@ class phpdevweb
       hasstatus  => true,
       status     => "true",
       hasrestart => false
+      ;
+    "ntpd":
+      name      => 'ntpd',
+      require   => Package["ntp"],
+      ensure    => running,
+      enable    => true
       ;
     "nginx":
       name      => 'nginx',
@@ -83,6 +94,12 @@ class phpdevweb
     "mysqld":
       name      => 'mysqld',
       require   => Package["mysql-server"],
+      ensure    => running,
+      enable    => true
+      ;
+    "memcached":
+      name      => 'memcached',
+      require   => Package["memcached"],
       ensure    => running,
       enable    => true
       ;
@@ -156,17 +173,34 @@ class phpdevweb
         group   => "vagrant",
         ensure => "directory"
       ;
-    "/home/vagrant/project":
+    "/home/vagrant/www":
         owner   => "vagrant",
         group   => "vagrant",
-        ensure => "directory"
+        ensure  => "directory"
       ;
     "/home/vagrant":
         owner   => "vagrant",
         group   => "vagrant",
         mode    => 711,
-        ensure => "directory"
+        ensure  => "directory"
       ;
+  }
+
+  vcsrepo { '/home/vagrant/www':
+    ensure              => present,
+    provider            => svn,
+    source              => '....',
+    basic_auth_username => '....',
+    basic_auth_password => '....',
+    owner               => 'vagrant',
+    group               => 'vagrant',
+  }
+
+  mysql::db { 'project':
+    user     => 'project',
+    password => 'projectpasswd',
+    host     => 'localhost',
+    sql      => '/vagrant/files/dump/project.sql',
   }
 
   user {
@@ -182,5 +216,10 @@ class phpdevweb
       require => Package["samba"],
       ;
   }
+  exec {
+    "set timezone":
+      command => "unlink /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Kiev /etc/localtime",
+      ;
+  }
 }
-include phpdevweb
+include devweb
