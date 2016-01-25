@@ -2,3 +2,11 @@ classes:
   - remi
   - php
   - nginx
+
+php::ensure: 5.4.45
+php::fpm: true
+php::composer: true
+php::pear: true
+php::phpunit: false
+php::fpm::config::log_level: notice
+php::composer::auto_update: true
