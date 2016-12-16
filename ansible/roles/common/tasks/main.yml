@@ -1,0 +1,32 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- user:
+    name: vagrant
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+
+- name: Install common packages
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - rsync
+    - subversion
+    - git
+    - vim
+    - curl
+    - samba
+    - samba-client
+    - memcached
+    - htop
+
+- name: Ensure services are enabled and started
+  service:
+    name: "{{item}}"
+    enabled: yes
+    state: restarted
+  with_items:
+    - memcached

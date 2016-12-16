@@ -1,0 +1,56 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- apt_repository:
+    repo: deb http://packages.dotdeb.org jessie all
+    state: present
+
+- apt_repository:
+    repo: deb-src http://packages.dotdeb.org jessie all
+    state: present
+
+- name: Install PHP 5.6
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - php5
+    - php5-cli
+    - php5-common
+    - php5-curl
+    - php5-fpm
+    - php5-xdebug
+    - php5-xhprof
+    - php5-mcrypt
+    - php5-mysqlnd
+    - php5-gearman
+    - php5-imagick
+    - php5-gd
+    - php5-geoip
+    - php5-memcache
+    - php5-memcached
+
+- name: Copy php5-fpm configuration in place.
+  template:
+    src: www.conf
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    owner: root
+    group: "root"
+    mode: 0644
+
+- name: Ensure services are enabled and started
+  service:
+    name: php5-fpm
+    enabled: yes
+    state: restarted
+
+- user:
+    name: vagrant
+    shell: /bin/bash
+    groups: www-data
+    append: yes
+
+- name: composer install
+  shell: >
+      curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer

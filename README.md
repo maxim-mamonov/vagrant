@@ -1,2 +1,6 @@
-vagrant-lamp-centos65
+vagrant-lamp-debian 8.6
 =====================
+
+TODO:
+
+add samba install
