@@ -30,3 +30,12 @@
     state: restarted
   with_items:
     - memcached
+    - smbd
+
+- name: Copy samba configuration in place.
+  template:
+    src: smb.conf
+    dest: "/etc/samba/smb.conf"
+    owner: root
+    group: "root"
+    mode: 0644

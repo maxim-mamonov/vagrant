@@ -3,4 +3,11 @@ vagrant-lamp-debian 8.6
 
 TODO:
 
-add samba install
+install cygwin with packages:
+* wget
+* curl
+* gz
+* rsync
+
+run:
+vagrant up --provision
