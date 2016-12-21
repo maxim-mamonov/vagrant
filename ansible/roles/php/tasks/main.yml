@@ -27,6 +27,7 @@
     - php5-gearman
     - php5-imagick
     - php5-gd
+    - php5-xsl
     - php5-geoip
     - php5-memcache
     - php5-memcached
