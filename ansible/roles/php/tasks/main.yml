@@ -52,6 +52,29 @@
     groups: www-data
     append: yes
 
+- file:
+    path: /home/vagrant/www/test
+    owner: vagrant
+    group: vagrant
+    state: directory
+    mode: 0775
+
+- name: Copy default php script in place.
+  template:
+    src: index.php
+    dest: "/home/vagrant/www/test/index.php"
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Copy default user nginx configuration in place.
+  template:
+    src: test.conf
+    dest: "/home/vagrant/nginx/test.conf"
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
 - name: composer install
   shell: >
       curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer

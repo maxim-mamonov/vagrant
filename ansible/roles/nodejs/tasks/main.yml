@@ -1,0 +1,12 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install NodeJs
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - nodejs
+    - npm
+    - build-essential

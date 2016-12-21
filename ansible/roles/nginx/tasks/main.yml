@@ -11,7 +11,7 @@
     src: nginx.conf
     dest: "/etc/nginx/nginx.conf"
     owner: root
-    group: "root"
+    group: root
     mode: 0644
 
 - file:
@@ -19,21 +19,21 @@
     owner: vagrant
     group: vagrant
     state: directory
-    mode: 0711
+    mode: 0775
 
 - file:
     path: /home/vagrant/nginx
     owner: vagrant
     group: vagrant
     state: directory
-    mode: 0644
+    mode: 0775
 
 - file:
     path: /home/vagrant/logs
     owner: vagrant
     group: vagrant
     state: directory
-    mode: 0644
+    mode: 0775
 
 - name: Ensure services are enabled and started
   service:

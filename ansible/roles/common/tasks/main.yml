@@ -39,3 +39,8 @@
     owner: root
     group: "root"
     mode: 0644
+
+- name: Create Samba Password for User(s)
+  shell: "(echo {{ item.smbpasswd }}; echo {{ item.smbpasswd }}) | smbpasswd -s -a {{ item.name }}"
+  with_items:
+    - { name: 'vagrant', smbpasswd: 'vagrant' }
